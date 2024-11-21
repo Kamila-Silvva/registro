@@ -1,0 +1,197 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styles */
+  form {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  input, textarea, select {
+    width: calc(100% - 20px); /* Garante espaçamento interno lateral */
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Inclui padding na largura total */
+  }
+  
+  /* Button Styles */
+  button {
+    background-color: #28a745; /* Cor verde do botão */
+    color: white;
+    padding: 8px 12px; /* Menor padding para deixar o botão mais compacto */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem; /* Menor tamanho de fonte */
+    margin-right: 10px; /* Espaçamento entre os botões */
+    transition: background-color 0.3s ease; /* Transição suave */
+    width: auto; /* Tamanho ajustável */
+    display: inline-block; /* Para os botões ficarem lado a lado */
+  }
+  
+  button:hover {
+    background-color: #218838; /* Cor mais escura ao passar o mouse */
+  }
+  
+  button.red {
+    background-color: #f44336; /* Cor vermelha para o botão Excluir */
+  }
+  
+  button.red:hover {
+    background-color: #d32f2f; /* Cor mais escura ao passar o mouse */
+  }
+  
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  /* Search Container */
+  .search-container {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .search-container input {
+    width: calc(100% - 40px); /* Espaçamento adicional */
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .hero {
+    background-image: url('path/to/your/image.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 40px 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .what-we-do ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .what-we-do li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 25px;
+  }
+  
+  .what-we-do li::before {
+    content: "\2022";  /* Símbolo de ponto */
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 24px;
+    color: #28a745; /* Cor do ponto */
+  }
+  
+  footer {
+  background-color: #f2f2f2;
+  padding: 20px;
+  text-align: center;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.social-links a {
+  text-decoration: none;
+  color: #333;
+  margin: 0 10px;
+}
+
+.social-links a:hover {
+  color: #28a745;
+}
+
+  
+  /* Responsividade - Tamanhos médios */
+  @media (max-width: 849px) {
+    body {
+      padding: 10px;
+    }
+  
+    form {
+      padding: 15px;
+    }
+  
+    input, textarea, select {
+      width: calc(100% - 20px); /* Mantém espaçamento lateral */
+      margin-bottom: 10px;
+    }
+  
+    table th, table td {
+      padding: 8px;
+      font-size: 14px;
+    }
+  }
+  
+  /* Responsividade - Tamanhos pequenos */
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 20px;
+    }
+  
+    .search-container input {
+      width: 100%;
+      margin: 0 0 10px 0;
+    }
+  
+    .search-container {
+      text-align: left;
+    }
+  
+    table {
+      font-size: 12px;
+    }
+  
+    table th, table td {
+      padding: 6px;
+    }
+  
+    button {
+      font-size: 0.9rem;
+    }
+  }
+  
