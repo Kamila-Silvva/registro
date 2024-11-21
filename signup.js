@@ -1,59 +1,75 @@
-// signup.js
-document.getElementById("signupForm").addEventListener("submit", function(event) {
-  event.preventDefault();
+const express = require("express");
+const mysql = require("mysql2");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+const cors = require("cors");
 
-  // Captura os dados do formulário
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+const app = express();
+const port = 3000;
 
-  // Valida a confirmação de senha
-  if (password !== confirmPassword) {
-    alert("As senhas não coincidem. Tente novamente.");
-    return;
+// Habilitando o CORS
+app.use(cors());
+
+// Configuração do body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Conexão com o banco de dados MySQL
+const db = mysql.createConnection({
+  host: "localhost",       // Altere para o host do seu servidor MySQL
+  user: "root",            // Usuário do banco de dados
+  password: "sua_senha",   // Senha do banco de dados
+  database: "ong"          // Nome do banco de dados
+});
+
+// Conectando ao banco de dados
+db.connect((err) => {
+  if (err) {
+    console.error("Erro ao conectar ao banco de dados:", err.message);
+    process.exit(1); // Sai do processo se não conseguir conectar
+  } else {
+    console.log("Conectado ao banco de dados MySQL");
   }
+});
 
-  // Valida a força da senha (mínimo de 8 caracteres, 1 letra maiúscula, 1 número e 1 caractere especial)
-  const passwordStrength = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  if (!passwordStrength.test(password)) {
-    alert("A senha deve ter pelo menos 8 caracteres, incluir uma letra maiúscula, um número e um caractere especial.");
-    return;
-  }
+// Endpoint para registrar um usuário
+app.post("/register", (req, res) => {
+  const { nome, email, senha } = req.body;
 
-  // Envia os dados para o backend
-  const data = {
-    name: name,
-    email: email,
-    password: password,
-  };
+  // Verifica se o email já está cadastrado
+  const emailCheckQuery = "SELECT * FROM usuarios WHERE email = ?";
+  db.query(emailCheckQuery, [email], (err, results) => {
+    if (err) {
+      console.error("Erro ao verificar email:", err);
+      return res.status(500).send("Erro ao verificar email");
+    }
 
-  // Exibe indicador de carregamento
-  const loadingIndicator = document.getElementById('loading');
-  loadingIndicator.style.display = 'block'; 
+    if (results.length > 0) {
+      return res.status(400).send("Email já cadastrado");
+    }
 
-  fetch("http://localhost:3000/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Erro ao cadastrar. Verifique seus dados e tente novamente.');
+    // Criptografa a senha antes de salvar no banco de dados
+    bcrypt.hash(senha, 10, (err, hashedPassword) => {
+      if (err) {
+        console.error("Erro ao criptografar a senha:", err);
+        return res.status(500).send("Erro ao criptografar a senha");
       }
-      return response.json();
-    })
-    .then((data) => {
-      alert("Usuário cadastrado com sucesso!");
-      window.location.href = "login.html"; // Redireciona para a página de login
-    })
-    .catch((error) => {
-      console.error("Erro ao cadastrar:", error);
-      alert(error.message); // Exibe a mensagem de erro para o usuário
-    })
-    .finally(() => {
-      loadingIndicator.style.display = 'none'; // Oculta o indicador de carregamento
+
+      // Insere os dados no banco de dados
+      const insertUserQuery = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
+      db.query(insertUserQuery, [nome, email, hashedPassword], (err) => {
+        if (err) {
+          console.error("Erro ao cadastrar usuário:", err);
+          return res.status(500).send("Erro ao cadastrar usuário");
+        } else {
+          res.status(200).send("Usuário cadastrado com sucesso");
+        }
+      });
     });
+  });
+});
+
+// Iniciando o servidor
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
